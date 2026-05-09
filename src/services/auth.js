@@ -1,19 +1,15 @@
-import { createClient } from '@/lib/client/createClient'
+import { createClient } from '@/lib/createClient'
+import { fetcher } from '@/lib/fetcher'
 
-/**
- * Auth service — stubbed until project needs auth.
- * Wire to Auth.js, Clerk, or any provider here.
- * App code calls these functions, never the provider directly.
- */
 const client = createClient({
   baseUrl: import.meta.env.VITE_AUTH_URL ?? '',
+  fetcher,
   normalizeError: (err) => ({
     message: err.raw?.error_description ?? err.message,
     code: err.raw?.error ?? 'auth_error',
   }),
 })
 
-// Stub — implement when project needs auth
 export const login = (_credentials) => {
   throw new Error('auth.login not implemented')
 }

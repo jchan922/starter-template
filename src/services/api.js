@@ -1,12 +1,9 @@
-import { createClient } from '@/lib/client/createClient'
+import { createClient } from '@/lib/createClient'
+import { fetcher } from '@/lib/fetcher'
 
-/**
- * Client for your own backend API.
- * Uses bearer token from session storage.
- * Update getHeaders to match your auth strategy.
- */
 const client = createClient({
   baseUrl: import.meta.env.VITE_API_URL,
+  fetcher,
   getHeaders: async () => ({
     Authorization: `Bearer ${sessionStorage.getItem('token') ?? ''}`,
   }),

@@ -1,12 +1,9 @@
-import { createClient } from '@/lib/client/createClient'
+import { createClient } from '@/lib/createClient'
+import { fetcher } from '@/lib/fetcher'
 
-/**
- * Client-safe payment calls only.
- * Uses public key — never put secret key here.
- * Stubbed until project needs payments.
- */
 const client = createClient({
   baseUrl: 'https://api.stripe.com',
+  fetcher,
   getHeaders: async () => ({
     Authorization: `Bearer ${import.meta.env.VITE_STRIPE_PUBLIC_KEY}`,
   }),
@@ -17,7 +14,6 @@ const client = createClient({
   }),
 })
 
-// Stub — implement when project needs payments
 export const createCheckoutSession = (_items) => {
   throw new Error('payments.createCheckoutSession not implemented')
 }
