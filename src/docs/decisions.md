@@ -1,4 +1,5 @@
 # Decisions
+
 > Architectural Decision Records (ADRs).
 > Before changing any core architectural decision, add an entry here
 > explaining the context, options considered, and rationale.

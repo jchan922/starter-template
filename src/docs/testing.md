@@ -1,4 +1,5 @@
 # Testing
+
 > Living document — update when testing patterns change or new
 > testing utilities are introduced.
 
@@ -15,6 +16,7 @@
 ## What to Test
 
 **Always test:**
+
 - Component renders with default props
 - Component renders each meaningful prop variant
 - User interactions (clicks, input changes, form submits)
@@ -22,6 +24,7 @@
 - Utility functions (all branches)
 
 **Skip:**
+
 - Implementation details (internal state, private methods)
 - Third-party library behavior
 - Styling (test behavior, not CSS)

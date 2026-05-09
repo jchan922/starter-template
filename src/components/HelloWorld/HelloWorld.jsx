@@ -10,7 +10,10 @@ import './HelloWorld.css'
  *   - Props documented inline with defaults
  *   - No direct service calls — data passed as props
  */
-const HelloWorld = ({ message = 'Hello World', subtitle = 'Your starter is deployed. Start building.' }) => {
+const HelloWorld = ({
+  message = 'Hello World',
+  subtitle = 'Your starter is deployed. Start building.',
+}) => {
   return (
     <div className="hello-world">
       <h1 className="hello-world-title">{message}</h1>

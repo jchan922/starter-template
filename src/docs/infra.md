@@ -1,4 +1,5 @@
 # Infrastructure
+
 > Living document — update when deploy targets change, new env vars
 > are added, or CI/CD pipelines are modified.
 
@@ -17,10 +18,10 @@ Update `name` in wrangler.toml per project before first deploy.
 
 ## CI/CD
 
-| Trigger | Pipeline | What runs |
-|---|---|---|
-| Pull request | `ci.yml` | format, lint, unit tests, build, e2e |
-| Push to main | `deploy.yml` | build, deploy to Cloudflare Pages |
+| Trigger      | Pipeline     | What runs                            |
+| ------------ | ------------ | ------------------------------------ |
+| Pull request | `ci.yml`     | format, lint, unit tests, build, e2e |
+| Push to main | `deploy.yml` | build, deploy to Cloudflare Pages    |
 
 Merge is blocked if CI fails.
 
@@ -44,13 +45,13 @@ Merge is blocked if CI fails.
 
 ### GitHub Secrets Required for Deploy
 
-| Secret | Description |
-|---|---|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API token with Pages permissions |
-| `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID |
-| `CLOUDFLARE_PROJECT_NAME` | Name of your Cloudflare Pages project |
-| `VITE_APP_NAME` | App name passed at build time |
-| `VITE_API_URL` | API base URL passed at build time |
+| Secret                    | Description                                 |
+| ------------------------- | ------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`    | Cloudflare API token with Pages permissions |
+| `CLOUDFLARE_ACCOUNT_ID`   | Your Cloudflare account ID                  |
+| `CLOUDFLARE_PROJECT_NAME` | Name of your Cloudflare Pages project       |
+| `VITE_APP_NAME`           | App name passed at build time               |
+| `VITE_API_URL`            | API base URL passed at build time           |
 
 ---
 
@@ -62,6 +63,7 @@ npm run preview   # preview production build locally
 ```
 
 Docker (if project has a server):
+
 ```bash
 cd infra
 docker-compose up

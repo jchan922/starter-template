@@ -16,8 +16,8 @@ const client = createClient({
   }),
 })
 
-export const get    = client.get
-export const post   = client.post
-export const put    = client.put
-export const patch  = client.patch
+export const get = client.get
+export const post = client.post
+export const put = client.put
+export const patch = client.patch
 export const remove = client.delete

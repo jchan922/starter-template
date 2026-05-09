@@ -1,4 +1,5 @@
 # Architecture
+
 > Living document — update when folder structure changes, new layers
 > are introduced, or responsibilities shift.
 
