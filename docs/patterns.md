@@ -8,19 +8,36 @@
 
 ---
 
-## Adding a Route
+## Adding a New Route
 
-1. Create a page component in [`/pages/`](../src/pages/)
-2. Register it in [`app.jsx`](../src/app.jsx) via `createBrowserRouter`
-3. Pages are composition only — no logic, no fetch calls
+Every new route touches both the server and (optionally) the frontend. Complete steps in order.
 
-```jsx
-// app.jsx
-const router = createBrowserRouter([
-  { path: '/', element: <HomePage /> },
-  { path: '/things/:id', element: <ThingPage /> },
-])
-```
+### Server side
+
+1. Create `server/handlers/<resource>/` folder
+2. Write `handler.js` — pure functions returning `{ status, body }`, no runtime imports
+3. Write `fetch.js` — all data access via `server/db` or `server/services/`
+4. Write `model.js` — pure transforms, no db or service imports
+5. **CF Pages:** add `functions/<resource>/[param].js` (see [`templates/adapter.cf.js`](templates/adapter.cf.js))
+6. **ECS/Node:** register the route in `server/index.js` (see [`templates/adapter.node.js`](templates/adapter.node.js))
+7. Write unit tests for `model.js` — pure functions, no mocks needed
+
+### Frontend side (if the UI needs this route)
+
+8. Add a named function to `src/services/api.js` that calls the new endpoint
+9. Add a hook in `src/hooks/` that calls the service function
+10. Add a page in `src/pages/` and register it in `app.jsx`
+11. Build the component
+
+### Templates
+
+| What             | Template                                                 |
+| ---------------- | -------------------------------------------------------- |
+| Handler          | [`templates/handler.js`](templates/handler.js)           |
+| Fetch layer      | [`templates/fetch.js`](templates/fetch.js)               |
+| Model layer      | [`templates/model.js`](templates/model.js)               |
+| CF Pages adapter | [`templates/adapter.cf.js`](templates/adapter.cf.js)     |
+| ECS/Node adapter | [`templates/adapter.node.js`](templates/adapter.node.js) |
 
 ---
 

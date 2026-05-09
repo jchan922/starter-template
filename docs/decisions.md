@@ -141,3 +141,25 @@ adapter difference applies.
 
 **Tradeoff:** Infra docs cover two paths, which adds length. Worth it
 to avoid baking in a deploy assumption that limits the template's reach.
+
+---
+
+## ADR-008 — Full-Stack Monorepo with Runtime-Agnostic Handlers
+
+**Date:** 2026-05-09
+**Status:** Accepted
+
+**Context:** The template needed a server-side architecture that works for
+both CF Pages (Workers runtime) and ECS (Node runtime) without reshaping
+code between targets. Original structure mixed server concerns into `src/`
+alongside browser code.
+
+**Decision:** `server/` at repo root, never imported by `src/`. Handlers
+are pure functions returning `{ status, body }`. Thin adapter files
+(`functions/` for CF Pages, `server/index.js` for ECS) are the only
+runtime-specific code. `src/services/` is browser-only and flat.
+`server/db/` is a pure interface — implementation swapped per runtime.
+
+**Tradeoff:** Projects that only need a frontend SPA carry empty `server/`
+and `functions/` stubs. Acceptable — the stubs are small and the
+architectural clarity is worth it.

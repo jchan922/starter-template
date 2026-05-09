@@ -15,6 +15,7 @@ Zero-ops static + edge functions. Push to `main` deploys automatically via GitHu
 
 Config: [`/infra/wrangler.toml`](../infra/wrangler.toml)
 Deploy command: `pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}`
+Server routes live in [`functions/`](../functions/) as CF Pages Functions. Each file maps one route to a handler in `server/handlers/`. See [`templates/adapter.cf.js`](templates/adapter.cf.js).
 
 Update `name` in [`infra/wrangler.toml`](../infra/wrangler.toml) before first deploy.
 
@@ -27,6 +28,7 @@ Containerised Node.js. Full Node runtime — all handler/fetch/model patterns wo
 - Write Terraform in `/infra/` to define ECS task, service, ALB, and ECB repository
 - Update [`deploy.yml`](../.github/workflows/deploy.yml) to build and push the Docker image and trigger a deployment
 - Use [`infra/Dockerfile`](../infra/Dockerfile) as the container definition
+- Server routes are registered in [`server/index.js`](../server/index.js). See [`templates/adapter.node.js`](templates/adapter.node.js).
 
 ---
 
