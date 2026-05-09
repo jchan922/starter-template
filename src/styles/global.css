@@ -1,0 +1,9 @@
+/*
+  Global Styles
+  Imported once in main.jsx.
+  Add only truly global styles here — page layout, body defaults.
+  Component styles live in their own CSS files.
+*/
+
+@import './tokens.css';
+@import './reset.css';

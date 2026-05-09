@@ -1,0 +1,10 @@
+name = "your-project-name"         # update per project
+compatibility_date = "2024-01-01"
+
+[build]
+command = "npm run build"
+output_directory = "dist"
+
+[env.production]
+# Production environment variables are set in Cloudflare dashboard
+# or via GitHub Actions secrets — not here
