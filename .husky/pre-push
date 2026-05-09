@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # Runs on every push — full quality gate before code leaves your machine
 # All checks must pass or the push is blocked
 npm run format:check && npm run lint && npm run test && npm run build

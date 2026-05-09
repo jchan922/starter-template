@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # Runs on every commit — fast checks only
 # Formats and lints staged files before they are committed
 npx lint-staged
