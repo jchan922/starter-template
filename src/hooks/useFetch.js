@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { fetcher } from '@/lib/client/fetcher'
+import { fetcher } from '@/lib/fetcher'
 
 /**
  * useFetch — thin React wrapper around the client fetcher.
