@@ -68,22 +68,6 @@ pass but should be reviewed periodically.
 
 ---
 
-## Local Dev
-
-```bash
-npm run dev       # start Vite dev server
-npm run preview   # preview production build locally
-```
-
-Docker (if project has a server):
-
-```bash
-cd infra
-docker-compose up
-```
-
----
-
 ## Node Version
 
 Node 24 is pinned across the project:

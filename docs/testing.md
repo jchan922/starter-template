@@ -72,14 +72,3 @@ test('user can complete checkout', async ({ page }) => {
 ```
 
 Use `data-testid` attributes for E2E selectors — never class names or text.
-
----
-
-## Running Tests
-
-```bash
-npm run test          # unit tests once
-npm run test:watch    # unit tests in watch mode
-npm run test:coverage # coverage report
-npm run test:e2e      # playwright e2e
-```

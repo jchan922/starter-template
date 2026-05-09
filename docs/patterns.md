@@ -65,16 +65,7 @@ export const useThings = () => {
 
 ## Adding a New Component
 
-Copy the HelloWorld pattern:
-
-```
-/components
-  /MyComponent
-    MyComponent.jsx
-    MyComponent.css
-    MyComponent.stories.jsx
-    MyComponent.test.jsx
-```
+Copy the `HelloWorld` pattern: one folder with `.jsx`, `.css`, `.stories.jsx`, and `.test.jsx`.
 
 - One root CSS class matching component name
 - All child rules nested inside it
