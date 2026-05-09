@@ -1,7 +1,9 @@
-import { createClient } from '@/lib/client/createClient'
+import { createClient } from '@/lib/createClient'
+import { fetcher } from '@/lib/fetcher'
 
 const client = createClient({
   baseUrl: import.meta.env.VITE_SERVICE_URL,
+  fetcher,
   getHeaders: async () => ({
     Authorization: `Bearer ${sessionStorage.getItem('token')}`,
   }),

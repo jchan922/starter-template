@@ -1,6 +1,6 @@
 // All data access lives here — DB queries, external API calls.
 // Side effects are isolated to this file, making handler and model pure and testable.
-import * as db from '@/services/server/db'
+import * as db from '../../db/index.js'
 
 export const fetchThings = () => db.find('things', {})
 

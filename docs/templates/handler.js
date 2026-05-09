@@ -1,9 +1,8 @@
-// Entry and exit point. Thin — validates input, calls fetch + model, returns response.
+// Entry and exit point. Thin — validates input, calls fetch + model, returns { status, body }.
 // No business logic lives here.
 //
-// Adapter note: return { status, body } and let your framework layer map to HTTP.
-// Node/ECS: wrap with Express/Hono. CF Pages: wrap with onRequest* handler.
-// The logic below is the same either way.
+// CF Pages adapter: wire in functions/<resource>/[param].js using onRequest*
+// ECS/Node adapter: wire in server/index.js using your HTTP framework
 import { fetchThings, fetchThingById, persistThing } from './fetch.js'
 import { toThing, toThingList, fromBody } from './model.js'
 
