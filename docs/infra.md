@@ -7,23 +7,35 @@
 
 ## Deploy Target
 
-**Cloudflare Pages** — default for static and edge deployments.
+**Cloudflare Pages** via `wrangler-action` (migrated from `pages-action`).
 Push to `main` triggers automatic deploy via GitHub Actions.
 
 Config: `/infra/wrangler.toml`
+Deploy command: `pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}`
 
-Update `name` in wrangler.toml per project before first deploy.
+Update `name` in `infra/wrangler.toml` per project before first deploy.
 
 ---
 
 ## CI/CD
 
-| Trigger      | Pipeline     | What runs                            |
-| ------------ | ------------ | ------------------------------------ |
-| Pull request | `ci.yml`     | format, lint, unit tests, build, e2e |
-| Push to main | `deploy.yml` | build, deploy to Cloudflare Pages    |
+| Trigger      | Pipeline     | What runs                                   |
+| ------------ | ------------ | ------------------------------------------- |
+| Pull request | `ci.yml`     | format, lint, audit, unit tests, build, e2e |
+| Push to main | `deploy.yml` | build, deploy via wrangler-action           |
 
-Merge is blocked if CI fails.
+Merge is blocked if CI fails or if `npm audit` finds high severity vulnerabilities.
+
+---
+
+## Dependency Management
+
+Dependabot runs monthly and opens PRs for outdated npm packages.
+Review and merge these PRs to keep the dependency tree healthy.
+
+`npm audit --audit-level=high` runs on every PR and blocks merge on
+high severity vulnerabilities. Low and moderate severity issues still
+pass but should be reviewed periodically.
 
 ---
 
@@ -52,6 +64,7 @@ Merge is blocked if CI fails.
 | `CLOUDFLARE_PROJECT_NAME` | Name of your Cloudflare Pages project       |
 | `VITE_APP_NAME`           | App name passed at build time               |
 | `VITE_API_URL`            | API base URL passed at build time           |
+| `VITE_STRIPE_PUBLIC_KEY`  | Stripe public key passed at build time      |
 
 ---
 
@@ -68,3 +81,13 @@ Docker (if project has a server):
 cd infra
 docker-compose up
 ```
+
+---
+
+## Node Version
+
+Node 24 is pinned across the project:
+
+- `.nvmrc` — run `nvm use` to switch automatically
+- `package.json` engines field — documents the requirement
+- `.github/workflows` — both pipelines use `node-version: 24`
