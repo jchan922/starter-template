@@ -89,7 +89,7 @@ Answer these before building. Update this file when decisions are made.
 
 ## Adding a New Feature
 
-1. Read `src/docs/AI_CONTEXT.md` (or let your AI agent do it)
+1. Read `docs/AI_CONTEXT.md` (or let your AI agent do it)
 2. Follow the HelloWorld component as your pattern template
 3. Add the component, its CSS, a story, and a test — all together
 4. Wire data through a hook → service, never directly in the component
@@ -100,4 +100,4 @@ Answer these before building. Update this file when decisions are made.
 ## Docs
 
 All architecture and pattern docs live in `src/docs/`.
-AI agents are configured to read `src/docs/AI_CONTEXT.md` on every session.
+AI agents are configured to read `docs/AI_CONTEXT.md` on every session.

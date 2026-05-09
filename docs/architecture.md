@@ -15,13 +15,21 @@
       deploy.yml              ← push to main auto deploys to Cloudflare
     copilot-instructions.md   ← GitHub Copilot agent pointer
 
+  /docs
+    AI_CONTEXT.md             ← agent entry point, session cache target
+    architecture.md           ← this file
+    patterns.md               ← code patterns reference
+    design-system.md          ← CSS and component conventions
+    testing.md                ← test conventions
+    infra.md                  ← deploy and env var guide
+    decisions.md              ← architectural decision records
+
   /infra
     wrangler.toml             ← Cloudflare Pages config, update per project
     Dockerfile                ← only if project needs a server component
     docker-compose.yml        ← local dev services (db, etc)
 
   /src
-
     /lib
       /client
         fetcher.js            ← base browser fetch, handles errors/retries/logging
@@ -61,15 +69,6 @@
 
     /utils
       index.js                ← pure stateless helpers, no side effects
-
-    /docs                     ← you are here
-      AI_CONTEXT.md           ← agent entry point, session cache target
-      architecture.md         ← this file
-      patterns.md             ← code patterns reference
-      design-system.md        ← CSS and component conventions
-      testing.md              ← test conventions
-      infra.md                ← deploy and env var guide
-      decisions.md            ← architectural decision records
 
     main.jsx                  ← entry point, imports global.css, mounts app
     app.jsx                   ← root component, router shell
