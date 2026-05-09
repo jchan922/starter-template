@@ -6,8 +6,8 @@ const HelloWorld = ({
 }) => {
   return (
     <div className="hello-world">
-      <h1 className="title">{message}</h1>
-      <p className="subtitle">{subtitle}</p>
+      <h1 className="hello-world-title">{message}</h1>
+      <p className="hello-world-subtitle">{subtitle}</p>
     </div>
   )
 }

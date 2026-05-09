@@ -7,7 +7,7 @@
   padding: var(--space-xl);
   background: var(--color-background);
 
-  .title {
+  .hello-world-title {
     font-size: var(--font-4xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-primary);
@@ -15,7 +15,7 @@
     margin: 0 0 var(--space-md);
   }
 
-  .subtitle {
+  .hello-world-subtitle {
     font-size: var(--font-lg);
     color: var(--color-muted);
     text-align: center;

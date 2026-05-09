@@ -70,7 +70,7 @@ export const useThings = () => {
 Copy the `HelloWorld` pattern: one folder with `.jsx`, `.css`, `.stories.jsx`, and `.test.jsx`.
 
 - One root CSS class matching component name in kebab-case
-- Child classes are short contextual names (`.title`, `.body`) — never prefixed with the parent name, no BEM
+- Child classes follow `component-name-child` pattern (e.g. `.card-title`) — single hyphen, no BEM `__` or `--`
 - All values from tokens — no hardcoded colors or spacing
 - Props documented with defaults
 - No service calls inside the component
