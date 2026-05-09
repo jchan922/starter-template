@@ -3,6 +3,8 @@
 > Living document — add new patterns as they emerge. Remove patterns
 > that get superseded. Reference this before writing new services,
 > hooks, or utilities.
+>
+> Copy-paste stubs for all patterns live in [`templates/`](templates/).
 
 ---
 
