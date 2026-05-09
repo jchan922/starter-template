@@ -57,6 +57,8 @@ pass but should be reviewed periodically.
 
 ### GitHub Secrets Required for Deploy
 
+Add these to your GitHub repo under `Settings → Secrets → Actions` before the first push.
+
 | Secret                    | Description                                 |
 | ------------------------- | ------------------------------------------- |
 | `CLOUDFLARE_API_TOKEN`    | Cloudflare API token with Pages permissions |
