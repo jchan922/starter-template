@@ -1,21 +1,7 @@
-import { fetcher } from './fetcher'
-
-/**
- * Creates a configured HTTP client for server-side service calls.
- * Safe to use secret keys — this never runs in the browser.
- *
- * @param {Object} config
- * @param {string} config.baseUrl - Base URL for the service
- * @param {Function} [config.getHeaders] - Async fn returning auth headers (secret keys safe here)
- * @param {Function} [config.normalizeError] - Maps raw errors to domain shape
- */
-export const createClient = ({ baseUrl, getHeaders, normalizeError }) => {
+export const createClient = ({ baseUrl, fetcher, getHeaders, normalizeError }) => {
   const buildHeaders = async () => {
     const custom = (await getHeaders?.()) ?? {}
-    return {
-      'Content-Type': 'application/json',
-      ...custom,
-    }
+    return { 'Content-Type': 'application/json', ...custom }
   }
 
   const request = async (method, path, body) => {
