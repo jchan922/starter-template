@@ -1,13 +1,8 @@
-/**
- * Database service — stubbed until project needs a database.
- * Swap implementation for Mongo or Postgres per project.
- * App code calls these functions, never the DB driver directly.
- *
- * Mongo:    npm install mongoose
- * Postgres: npm install prisma @prisma/client
- */
+// Database service — implement for your runtime when needed.
+// Node/ECS: Mongoose, Prisma, pg, etc.
+// CF Pages: D1 binding via env, or Hyperdrive for Postgres.
+// The interface below stays the same either way.
 
-// Stub — implement when project needs a database
 export const find = (_collection, _query) => {
   throw new Error('db.find not implemented')
 }

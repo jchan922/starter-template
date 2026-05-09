@@ -57,6 +57,21 @@ domain-specific API. Providers are swapped by replacing one file.
 **Tradeoff:** Adds one layer of indirection. Worth it — provider
 migrations have happened multiple times across similar projects.
 
+**Runtime note:** The seam works at two levels:
+
+1. **Provider swap** — replace Stripe with something else, only `services/server/payments.js` changes.
+2. **Runtime swap** — migrate from CF Pages to ECS (or vice versa), only `services/server/` implementations change. Handlers, hooks, and components are untouched.
+
+The service files in this repo are intentionally interface-only stubs (function signatures + `throw`). The implementation inside each file will differ by runtime:
+
+|               | Node / ECS                      | CF Pages                         |
+| ------------- | ------------------------------- | -------------------------------- |
+| `db.js`       | Mongoose, Prisma, pg            | D1 binding via `env`, Hyperdrive |
+| `payments.js` | Stripe Node SDK                 | Stripe REST API via `fetch`      |
+| `email.js`    | Resend/SendGrid SDK, Nodemailer | Provider REST API via `fetch`    |
+
+The exported function names never change — only the bodies.
+
 ---
 
 ## ADR-004 — Components as a Project-Level Decision
