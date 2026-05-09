@@ -1,12 +1,12 @@
 .component-name {
   padding: var(--space-md);
 
-  .component-name-value {
+  .value {
     font-size: var(--font-md);
     color: var(--color-primary);
   }
 
-  .component-name-error {
+  .error {
     color: var(--color-danger);
   }
 }

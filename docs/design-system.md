@@ -11,6 +11,7 @@
 - One CSS file per component, co-located with the JSX
 - Native CSS nesting for scoping — no preprocessor, no CSS Modules
 - Every component scoped under a single root class
+- **No BEM.** Child classes are short contextual names (`.title`, `.body`). Nesting provides the scope — never prefix child classes with the parent name.
 
 ---
 
@@ -34,16 +35,18 @@ Always use the token. Never use the raw value.
 
 ## CSS Scoping Pattern
 
+Native nesting provides the scope — child classes don't need to repeat the parent name. No BEM, no prefixes.
+
 ```css
 /* MyComponent.css */
 .my-component {
   /* component root styles */
 
-  .my-component-header {
-    /* scoped to this component only */
+  .header {
+    /* scoped to .my-component automatically via nesting */
   }
 
-  .my-component-body {
+  .body {
     padding: var(--space-md);
 
     &:hover {
@@ -56,7 +59,8 @@ Always use the token. Never use the raw value.
 Rules:
 
 - Root class matches component name in kebab-case
-- Child classes prefixed with root class name
+- Child classes are short, contextual names — never prefixed with the parent name
+- No BEM (`__` or `--` modifier syntax)
 - No global selectors inside component files
 - No `!important`
 
