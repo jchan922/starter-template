@@ -32,44 +32,44 @@ Push to `main`. GitHub Actions handles the rest.
 **First deploy only** — add these secrets to your GitHub repo
 (`Settings → Secrets → Actions`):
 
-| Secret | Where to find it |
-|---|---|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare dashboard → My Profile → API Tokens |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard → right sidebar |
-| `CLOUDFLARE_PROJECT_NAME` | Name of your Cloudflare Pages project |
-| `VITE_APP_NAME` | Your app's display name |
-| `VITE_API_URL` | Your API base URL (or leave blank for now) |
+| Secret                    | Where to find it                               |
+| ------------------------- | ---------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`    | Cloudflare dashboard → My Profile → API Tokens |
+| `CLOUDFLARE_ACCOUNT_ID`   | Cloudflare dashboard → right sidebar           |
+| `CLOUDFLARE_PROJECT_NAME` | Name of your Cloudflare Pages project          |
+| `VITE_APP_NAME`           | Your app's display name                        |
+| `VITE_API_URL`            | Your API base URL (or leave blank for now)     |
 
-Update `infra/wrangler.toml` with your project name before first push.
+Update [`infra/wrangler.toml`](infra/wrangler.toml) with your project name before first push.
 
 ---
 
 ## NPM Scripts
 
-| Script | What it does |
-|---|---|
-| `npm run dev` | Start local dev server |
-| `npm run build` | Production build |
-| `npm run preview` | Preview production build locally |
-| `npm run test` | Run unit tests once |
-| `npm run test:watch` | Run unit tests in watch mode |
-| `npm run test:coverage` | Unit tests with coverage report |
-| `npm run test:e2e` | Run Playwright e2e tests |
-| `npm run lint` | Check for lint errors |
-| `npm run lint:fix` | Auto-fix lint errors |
-| `npm run format` | Format all files with Prettier |
-| `npm run format:check` | Check formatting without writing |
-| `npm run storybook` | Start Storybook on port 6006 |
-| `npm run build:storybook` | Build static Storybook |
+| Script                    | What it does                     |
+| ------------------------- | -------------------------------- |
+| `npm run dev`             | Start local dev server           |
+| `npm run build`           | Production build                 |
+| `npm run preview`         | Preview production build locally |
+| `npm run test`            | Run unit tests once              |
+| `npm run test:watch`      | Run unit tests in watch mode     |
+| `npm run test:coverage`   | Unit tests with coverage report  |
+| `npm run test:e2e`        | Run Playwright e2e tests         |
+| `npm run lint`            | Check for lint errors            |
+| `npm run lint:fix`        | Auto-fix lint errors             |
+| `npm run format`          | Format all files with Prettier   |
+| `npm run format:check`    | Check formatting without writing |
+| `npm run storybook`       | Start Storybook on port 6006     |
+| `npm run build:storybook` | Build static Storybook           |
 
 ---
 
 ## Git Hooks
 
-| Hook | When | What runs |
-|---|---|---|
-| `pre-commit` | Every commit | Prettier + ESLint on staged files |
-| `pre-push` | Every push | Format check + lint + tests + build |
+| Hook         | When         | What runs                           |
+| ------------ | ------------ | ----------------------------------- |
+| `pre-commit` | Every commit | Prettier + ESLint on staged files   |
+| `pre-push`   | Every push   | Format check + lint + tests + build |
 
 Push is blocked if any check fails.
 
@@ -89,7 +89,7 @@ Answer these before building. Update this file when decisions are made.
 
 ## Adding a New Feature
 
-1. Read `docs/AI_CONTEXT.md` (or let your AI agent do it)
+1. Read [`docs/AI_CONTEXT.md`](docs/AI_CONTEXT.md) (or let your AI agent do it)
 2. Follow the HelloWorld component as your pattern template
 3. Add the component, its CSS, a story, and a test — all together
 4. Wire data through a hook → service, never directly in the component
@@ -99,5 +99,5 @@ Answer these before building. Update this file when decisions are made.
 
 ## Docs
 
-All architecture and pattern docs live in `src/docs/`.
-AI agents are configured to read `docs/AI_CONTEXT.md` on every session.
+All architecture and pattern docs live in [`docs/`](docs/).
+AI agents are configured to read [`docs/AI_CONTEXT.md`](docs/AI_CONTEXT.md) on every session.

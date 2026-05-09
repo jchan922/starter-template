@@ -48,14 +48,14 @@ Default to:
 > and add it to this table. Stale documentation is worse than no
 > documentation — it actively misleads.
 
-| File               | What It Covers                                             | Read When                                             |
-| ------------------ | ---------------------------------------------------------- | ----------------------------------------------------- |
-| `architecture.md`  | Folder structure, file responsibilities, layer boundaries  | Starting a new feature, unsure where code belongs     |
-| `patterns.md`      | Code patterns: fetcher, createClient, service stubs, hooks | Writing a new service, hook, or utility               |
-| `design-system.md` | CSS tokens, naming conventions, component structure        | Touching styles, adding components, Storybook work    |
-| `testing.md`       | Unit and e2e conventions, what to test, what to skip       | Writing or debugging tests                            |
-| `infra.md`         | Deploy pipeline, env vars, Cloudflare config, CI/CD        | Changing deploy config, adding env vars, debugging CI |
-| `decisions.md`     | ADRs — why key decisions were made                         | Before proposing a change to core architecture        |
+| File                                   | What It Covers                                             | Read When                                             |
+| -------------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------- |
+| [`architecture.md`](architecture.md)   | Folder structure, file responsibilities, layer boundaries  | Starting a new feature, unsure where code belongs     |
+| [`patterns.md`](patterns.md)           | Code patterns: fetcher, createClient, service stubs, hooks | Writing a new service, hook, or utility               |
+| [`design-system.md`](design-system.md) | CSS tokens, naming conventions, component structure        | Touching styles, adding components, Storybook work    |
+| [`testing.md`](testing.md)             | Unit and e2e conventions, what to test, what to skip       | Writing or debugging tests                            |
+| [`infra.md`](infra.md)                 | Deploy pipeline, env vars, Cloudflare config, CI/CD        | Changing deploy config, adding env vars, debugging CI |
+| [`decisions.md`](decisions.md)         | ADRs — why key decisions were made                         | Before proposing a change to core architecture        |
 
 ---
 

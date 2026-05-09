@@ -13,19 +13,18 @@
     "test:e2e": "playwright test",
     "lint": "eslint src --ext .js,.jsx",
     "lint:fix": "eslint src --ext .js,.jsx --fix",
-    "format": "prettier --write src",
-    "format:check": "prettier --check src",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "storybook": "storybook dev -p 6006 --config-dir storybook",
     "build:storybook": "storybook build --config-dir storybook",
     "prepare": "husky"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx}": [
-      "prettier --write",
-      "eslint --fix"
+    "**/*": [
+      "prettier --write --ignore-unknown"
     ],
-    "src/**/*.css": [
-      "prettier --write"
+    "src/**/*.{js,jsx}": [
+      "eslint --fix"
     ]
   },
   "dependencies": {

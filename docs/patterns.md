@@ -8,7 +8,7 @@
 
 ## Adding a New Service
 
-1. Create the file in `/services/client/` or `/services/server/`
+1. Create the file in [`/services/client/`](../src/services/client/) or [`/services/server/`](../src/services/server/)
 2. Import `createClient` from the appropriate lib layer
 3. Configure baseUrl, getHeaders, normalizeError
 4. Export named functions — never export the raw client
@@ -36,7 +36,7 @@ export const createThing = (data) => client.post('/things', data)
 
 ## Adding a New Hook
 
-1. Create in `/hooks/`
+1. Create in [`/hooks/`](../src/hooks/)
 2. Name with `use` prefix
 3. Wire to services — never call fetch or external libs directly
 4. Return a consistent shape: `{ data, loading, error, ...actions }`

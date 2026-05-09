@@ -58,7 +58,7 @@ describe('MyComponent', () => {
 
 ## E2E Test Pattern
 
-E2E tests live in `/tests/e2e/`.
+E2E tests live in [`/tests/e2e/`](../tests/e2e/).
 Test full user flows, not individual components.
 
 ```js

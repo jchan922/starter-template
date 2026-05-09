@@ -16,7 +16,7 @@
 
 ## Token Reference
 
-Tokens are defined in `/src/styles/tokens.css`.
+Tokens are defined in [`/src/styles/tokens.css`](../src/styles/tokens.css).
 Always use the token. Never use the raw value.
 
 | Category   | Example Token            | Use                          |

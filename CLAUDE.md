@@ -2,7 +2,7 @@
 
 On every new session, read and cache the following file:
 
-  docs/AI_CONTEXT.md
+[docs/AI_CONTEXT.md](docs/AI_CONTEXT.md)
 
 This is the single source of truth for project context, philosophy,
 architecture, and documentation references. Cache it at the start of

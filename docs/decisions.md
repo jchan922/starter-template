@@ -50,7 +50,7 @@ No automatic scoping — enforced by nesting under root class.
 **Context:** Needed a pattern for integrating third-party services that
 doesn't couple app code to specific providers.
 
-**Decision:** All third-party calls go through `/services`. App code
+**Decision:** All third-party calls go through [`/services`](../src/services/). App code
 never imports external libraries directly. Services expose a
 domain-specific API. Providers are swapped by replacing one file.
 

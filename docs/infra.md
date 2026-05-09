@@ -10,19 +10,19 @@
 **Cloudflare Pages** via `wrangler-action` (migrated from `pages-action`).
 Push to `main` triggers automatic deploy via GitHub Actions.
 
-Config: `/infra/wrangler.toml`
+Config: [`/infra/wrangler.toml`](../infra/wrangler.toml)
 Deploy command: `pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}`
 
-Update `name` in `infra/wrangler.toml` per project before first deploy.
+Update `name` in [`infra/wrangler.toml`](../infra/wrangler.toml) per project before first deploy.
 
 ---
 
 ## CI/CD
 
-| Trigger      | Pipeline     | What runs                                   |
-| ------------ | ------------ | ------------------------------------------- |
-| Pull request | `ci.yml`     | format, lint, audit, unit tests, build, e2e |
-| Push to main | `deploy.yml` | build, deploy via wrangler-action           |
+| Trigger      | Pipeline                                        | What runs                                   |
+| ------------ | ----------------------------------------------- | ------------------------------------------- |
+| Pull request | [`ci.yml`](../.github/workflows/ci.yml)         | format, lint, audit, unit tests, build, e2e |
+| Push to main | [`deploy.yml`](../.github/workflows/deploy.yml) | build, deploy via wrangler-action           |
 
 Merge is blocked if CI fails or if `npm audit` finds high severity vulnerabilities.
 
@@ -46,14 +46,14 @@ pass but should be reviewed periodically.
 1. `VITE_` prefix = exposed to browser bundle. Public values only.
 2. No prefix = server/build only. Safe for secrets.
 3. Never commit `.env` or `.env.production`
-4. Always document new vars in `.env.example` with a description
+4. Always document new vars in [`.env.example`](../.env.example) with a description
 
 ### Adding a New Variable
 
 1. Add to `.env` locally with real value
-2. Add to `.env.example` with description and empty value
+2. Add to [`.env.example`](../.env.example) with description and empty value
 3. Add to GitHub repository secrets if needed in CI
-4. Update `deploy.yml` env block if needed at build time
+4. Update [`deploy.yml`](../.github/workflows/deploy.yml) env block if needed at build time
 
 ### GitHub Secrets Required for Deploy
 
@@ -88,6 +88,6 @@ docker-compose up
 
 Node 24 is pinned across the project:
 
-- `.nvmrc` — run `nvm use` to switch automatically
-- `package.json` engines field — documents the requirement
-- `.github/workflows` — both pipelines use `node-version: 24`
+- [`.nvmrc`](../.nvmrc) — run `nvm use` to switch automatically
+- [`package.json`](../package.json) engines field — documents the requirement
+- [`.github/workflows`](../.github/workflows) — both pipelines use `node-version: 24`
