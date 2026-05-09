@@ -8,6 +8,22 @@
 
 ---
 
+## Adding a Route
+
+1. Create a page component in [`/pages/`](../src/pages/)
+2. Register it in [`app.jsx`](../src/app.jsx) via `createBrowserRouter`
+3. Pages are composition only — no logic, no fetch calls
+
+```jsx
+// app.jsx
+const router = createBrowserRouter([
+  { path: '/', element: <HomePage /> },
+  { path: '/things/:id', element: <ThingPage /> },
+])
+```
+
+---
+
 ## Adding a New Service
 
 1. Create the file in [`/services/client/`](../src/services/client/) or [`/services/server/`](../src/services/server/)
@@ -40,7 +56,7 @@ export const createThing = (data) => client.post('/things', data)
 
 1. Create in [`/hooks/`](../src/hooks/)
 2. Name with `use` prefix
-3. Wire to services — never call fetch or external libs directly
+3. Wire to services or context — never call fetch or external libs directly
 4. Return a consistent shape: `{ data, loading, error, ...actions }`
 
 ```js
@@ -62,6 +78,20 @@ export const useThings = () => {
   return { data, loading, error }
 }
 ```
+
+---
+
+## Adding Shared State (Context)
+
+Use Context for state that multiple components need (auth, theme, cart).
+One context per domain. Always expose via a hook — never import the context object directly.
+
+1. Create in [`/context/`](../src/context/)
+2. Export a `Provider` component and a `use*Context` hook
+3. Mount the Provider in [`main.jsx`](../src/main.jsx)
+4. Consume via the hook, never via `useContext` directly
+
+See [`AuthContext.jsx`](../src/context/AuthContext.jsx) as the reference implementation.
 
 ---
 
@@ -94,5 +124,5 @@ const [error, setError] = useState(null)
 try { ... } catch (err) { setError(err) }
 
 // component — display
-{error && <p className="error-message">{error.message}</p>}
+{error && <p className="component-error">{error.message}</p>}
 ```

@@ -5,15 +5,28 @@
 
 ---
 
-## Deploy Target
+## Deploy Targets
 
-**Cloudflare Pages** via `wrangler-action` (migrated from `pages-action`).
-Push to `main` triggers automatic deploy via GitHub Actions.
+This template supports two paths. Choose one per project.
+
+### Cloudflare Pages
+
+Zero-ops static + edge functions. Push to `main` deploys automatically via GitHub Actions.
 
 Config: [`/infra/wrangler.toml`](../infra/wrangler.toml)
 Deploy command: `pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}`
 
-Update `name` in [`infra/wrangler.toml`](../infra/wrangler.toml) per project before first deploy.
+Update `name` in [`infra/wrangler.toml`](../infra/wrangler.toml) before first deploy.
+
+**Runtime note:** Server functions run in the CF Workers runtime — no Node.js APIs. Use `Request`/`Response` web standards. The `handler/fetch/model` pattern applies but the adapter layer differs from Node. See [CF Pages Functions docs](https://developers.cloudflare.com/pages/functions/).
+
+### AWS ECS (Terraform)
+
+Containerised Node.js. Full Node runtime — all handler/fetch/model patterns work as-is.
+
+- Write Terraform in `/infra/` to define ECS task, service, ALB, and ECB repository
+- Update [`deploy.yml`](../.github/workflows/deploy.yml) to build and push the Docker image and trigger a deployment
+- Use [`infra/Dockerfile`](../infra/Dockerfile) as the container definition
 
 ---
 
@@ -22,7 +35,7 @@ Update `name` in [`infra/wrangler.toml`](../infra/wrangler.toml) per project bef
 | Trigger      | Pipeline                                        | What runs                                   |
 | ------------ | ----------------------------------------------- | ------------------------------------------- |
 | Pull request | [`ci.yml`](../.github/workflows/ci.yml)         | format, lint, audit, unit tests, build, e2e |
-| Push to main | [`deploy.yml`](../.github/workflows/deploy.yml) | build, deploy via wrangler-action           |
+| Push to main | [`deploy.yml`](../.github/workflows/deploy.yml) | build + deploy (target-specific)            |
 
 Merge is blocked if CI fails or if `npm audit` finds high severity vulnerabilities.
 
@@ -33,9 +46,7 @@ Merge is blocked if CI fails or if `npm audit` finds high severity vulnerabiliti
 Dependabot runs monthly and opens PRs for outdated npm packages.
 Review and merge these PRs to keep the dependency tree healthy.
 
-`npm audit --audit-level=high` runs on every PR and blocks merge on
-high severity vulnerabilities. Low and moderate severity issues still
-pass but should be reviewed periodically.
+`npm audit --audit-level=high` runs on every PR and blocks merge on high severity vulnerabilities.
 
 ---
 

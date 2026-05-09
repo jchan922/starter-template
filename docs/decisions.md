@@ -87,3 +87,42 @@ native GitHub integration, no function cold starts on the free plan.
 
 **Tradeoff:** Less mature ecosystem than Vercel for edge functions.
 Switch to Vercel if the project needs complex SSR or middleware.
+
+---
+
+## ADR-006 — React Router v7 for Client-Side Routing
+
+**Date:** Project init
+**Status:** Accepted
+
+**Context:** Needed a routing convention to bake into the template.
+Options were React Router v7, TanStack Router (manual or file-based),
+or leaving routing as a per-project decision.
+
+**Decision:** React Router v7 with `createBrowserRouter`. Widest
+familiarity, clean loader pattern that maps to the service layer,
+works on both CF Pages and ECS without runtime differences.
+
+**Tradeoff:** TanStack Router has better long-term DX and type-safe
+routes, but adds upfront complexity for a template. Revisit if the
+project commits to TypeScript.
+
+---
+
+## ADR-007 — Template Supports Both CF Pages and ECS Deploy Targets
+
+**Date:** Project init
+**Status:** Accepted
+
+**Context:** Projects built on this template may deploy to Cloudflare
+Pages (edge, zero-ops) or AWS ECS via Terraform (containerised Node,
+more control). The server-side handler pattern needed to work for both.
+
+**Decision:** Application-layer patterns (handler/fetch/model, service
+layer, components, hooks) are runtime-agnostic. Deploy target is a
+per-project decision documented in infra.md. CF Pages uses Workers
+runtime; ECS uses full Node — the handler templates note where the
+adapter difference applies.
+
+**Tradeoff:** Infra docs cover two paths, which adds length. Worth it
+to avoid baking in a deploy assumption that limits the template's reach.

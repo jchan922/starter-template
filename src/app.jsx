@@ -1,12 +1,13 @@
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from '@/pages/index'
 
-/**
- * App root — routing shell.
- * Add a router here when project needs multiple pages.
- * e.g. React Router, TanStack Router
- */
-const App = () => {
-  return <HomePage />
-}
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomePage />,
+  },
+])
 
-export default App
+export default function App() {
+  return <RouterProvider router={router} />
+}

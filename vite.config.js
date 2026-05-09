@@ -12,7 +12,7 @@ export default defineConfig({
   test: {
     css: true,
     globals: true,
-    environment: 'jsdom',
+    environment: 'happy-dom',
     exclude: ['**/node_modules/**', '**/tests/e2e/**', '**/docs/**'],
     setupFiles: './tests/setup.js',
   },
