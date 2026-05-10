@@ -1,9 +1,9 @@
-name: Deploy
+name: Deploy to Cloudflare Pages
 
 on:
   push:
-    branches:
-      - main
+    tags: ['v*']
+  workflow_dispatch:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -13,11 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Extract version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
@@ -28,6 +29,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
+          VITE_APP_VERSION: ${{ env.VERSION }}
           VITE_APP_NAME: ${{ secrets.VITE_APP_NAME }}
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_STRIPE_PUBLIC_KEY: ${{ secrets.VITE_STRIPE_PUBLIC_KEY }}
