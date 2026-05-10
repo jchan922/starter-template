@@ -97,3 +97,99 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  deploy-cf:
+    needs: bump
+    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Extract version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm install
+
+      - run: npm run build
+        env:
+          VITE_APP_VERSION: ${{ env.VERSION }}
+          VITE_APP_NAME: ${{ secrets.VITE_APP_NAME }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_STRIPE_PUBLIC_KEY: ${{ secrets.VITE_STRIPE_PUBLIC_KEY }}
+
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+
+  deploy-ecs:
+    needs: bump
+    if: ${{ secrets.ECR_REPOSITORY != '' }}
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+      CONTAINER_NAME: app
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: Extract version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+        run: |
+          docker build \
+            --build-arg VITE_API_URL=${{ secrets.VITE_API_URL }} \
+            --build-arg VITE_APP_VERSION=${{ env.VERSION }} \
+            -t $REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ env.VERSION }} \
+            -t $REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }} \
+            -t $REGISTRY/${{ secrets.ECR_REPOSITORY }}:latest \
+            .
+          docker push $REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ env.VERSION }}
+          docker push $REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+          docker push $REGISTRY/${{ secrets.ECR_REPOSITORY }}:latest
+
+      - name: Download current task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ secrets.ECS_TASK_DEFINITION }} \
+            --query taskDefinition \
+            > task-definition.json
+
+      - name: Update task definition with new image
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.ecr-login.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ env.VERSION }}
+
+      - uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE }}
+          cluster: ${{ secrets.ECS_CLUSTER }}
+          wait-for-service-stability: true
