@@ -1,4 +1,9 @@
-name: Deploy to ECS
+name: Deploy to ECS (manual)
+
+# Parked — activate by adding AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
+# ECR_REPOSITORY, ECS_CLUSTER, ECS_SERVICE, and ECS_TASK_DEFINITION secrets.
+# The deploy-ecs job in release.yml will then run automatically on every
+# merge to main. This file is a manual fallback only.
 
 on:
   workflow_dispatch:
