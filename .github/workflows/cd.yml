@@ -38,10 +38,12 @@ jobs:
       - name: Bump patch version
         id: version
         run: |
+          PREV_VERSION=$(node -p "require('./package.json').version")
           npm version patch --no-git-tag-version
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "PREV_VERSION=$PREV_VERSION" >> $GITHUB_ENV
 
       - name: Commit and tag
         run: |
@@ -52,7 +54,7 @@ jobs:
           git push origin "v${{ env.VERSION }}"
 
       - name: Summary
-        run: echo "### Bumped to v${{ env.VERSION }}" >> $GITHUB_STEP_SUMMARY
+        run: echo "### v${{ env.PREV_VERSION }} → v${{ env.VERSION }}" >> $GITHUB_STEP_SUMMARY
 
   check-targets:
     needs: bump
