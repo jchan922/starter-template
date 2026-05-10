@@ -74,9 +74,23 @@ jobs:
           # GitHub Pages is the fallback — only when no other target is configured
           if [ -z "$CF_TOKEN" ] && [ -z "$ECR_REPO" ]; then
             echo "gh=true" >> $GITHUB_OUTPUT
+            GH_STATUS="✓ active (default)"
+            CF_STATUS="✗ skipped (CLOUDFLARE_API_TOKEN not set)"
+            ECS_STATUS="✗ skipped (ECR_REPOSITORY not set)"
           else
             echo "gh=false" >> $GITHUB_OUTPUT
+            GH_STATUS="✗ skipped"
+            [ -n "$CF_TOKEN" ] && CF_STATUS="✓ active" || CF_STATUS="✗ skipped (CLOUDFLARE_API_TOKEN not set)"
+            [ -n "$ECR_REPO" ] && ECS_STATUS="✓ active" || ECS_STATUS="✗ skipped (ECR_REPOSITORY not set)"
           fi
+          {
+            echo "### Deploy targets"
+            echo "| Target | Status |"
+            echo "|---|---|"
+            echo "| GitHub Pages | $GH_STATUS |"
+            echo "| Cloudflare Pages | $CF_STATUS |"
+            echo "| ECS | $ECS_STATUS |"
+          } >> $GITHUB_STEP_SUMMARY
 
   deploy-gh:
     needs: [bump, check-targets]
