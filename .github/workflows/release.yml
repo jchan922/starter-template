@@ -1,4 +1,4 @@
-name: Release
+name: CD
 
 on:
   push:
@@ -51,8 +51,31 @@ jobs:
           git push origin main
           git push origin "v${{ env.VERSION }}"
 
-  deploy-gh:
+  check-targets:
     needs: bump
+    runs-on: ubuntu-latest
+    outputs:
+      gh: ${{ steps.check.outputs.gh }}
+      cf: ${{ steps.check.outputs.cf }}
+      ecs: ${{ steps.check.outputs.ecs }}
+    steps:
+      - id: check
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ECR_REPO: ${{ secrets.ECR_REPOSITORY }}
+        run: |
+          [ -n "$CF_TOKEN" ] && echo "cf=true" >> $GITHUB_OUTPUT || echo "cf=false" >> $GITHUB_OUTPUT
+          [ -n "$ECR_REPO" ] && echo "ecs=true" >> $GITHUB_OUTPUT || echo "ecs=false" >> $GITHUB_OUTPUT
+          # GitHub Pages is the fallback — only when no other target is configured
+          if [ -z "$CF_TOKEN" ] && [ -z "$ECR_REPO" ]; then
+            echo "gh=true" >> $GITHUB_OUTPUT
+          else
+            echo "gh=false" >> $GITHUB_OUTPUT
+          fi
+
+  deploy-gh:
+    needs: [bump, check-targets]
+    if: needs.check-targets.outputs.gh == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -97,21 +120,6 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v5
-
-  check-targets:
-    needs: bump
-    runs-on: ubuntu-latest
-    outputs:
-      cf: ${{ steps.check.outputs.cf }}
-      ecs: ${{ steps.check.outputs.ecs }}
-    steps:
-      - id: check
-        env:
-          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          ECR_REPO: ${{ secrets.ECR_REPOSITORY }}
-        run: |
-          [ -n "$CF_TOKEN" ] && echo "cf=true" >> $GITHUB_OUTPUT || echo "cf=false" >> $GITHUB_OUTPUT
-          [ -n "$ECR_REPO" ] && echo "ecs=true" >> $GITHUB_OUTPUT || echo "ecs=false" >> $GITHUB_OUTPUT
 
   deploy-cf:
     needs: [bump, check-targets]
