@@ -152,7 +152,11 @@ jobs:
         uses: actions/deploy-pages@v5
 
       - name: Summary
-        run: echo "### Deployed v${{ env.VERSION }} to GitHub Pages ✓" >> $GITHUB_STEP_SUMMARY
+        run: |
+          {
+            echo "### Deployed v${{ env.VERSION }} to GitHub Pages ✓"
+            echo "${{ steps.deployment.outputs.page_url }}"
+          } >> $GITHUB_STEP_SUMMARY
 
   deploy-cf:
     needs: [bump, check-targets]
