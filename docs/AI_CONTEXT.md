@@ -21,12 +21,12 @@ This codebase is JavaScript today but designed to be typed later. Write as if ty
 
 > Update the relevant doc when you make structural changes, introduce new patterns, or add dependencies. Stale docs are worse than no docs.
 
-| File                                   | What It Covers                                                                    | Read When                                                         |
-| -------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| [`architecture.md`](architecture.md)   | Layer diagram for src/ and server/, adapter pattern, layer boundaries             | Starting a new feature, adding a route, unsure where code belongs |
-| [`patterns.md`](patterns.md)           | Code patterns: fetcher, createClient, service stubs, hooks                        | Writing a new service, hook, or utility                           |
-| [`design-system.md`](design-system.md) | CSS tokens, naming conventions, component structure                               | Touching styles, adding components, Storybook work                |
-| [`testing.md`](testing.md)             | Unit and e2e conventions, what to test, what to skip                              | Writing or debugging tests                                        |
-| [`infra.md`](infra.md)                 | Deploy pipeline, env vars, Cloudflare config, CI/CD                               | Changing deploy config, adding env vars, debugging CI             |
-| [`decisions.md`](decisions.md)         | ADRs — why key decisions were made                                                | Before proposing a change to core architecture                    |
-| [`templates/`](templates/)             | Copy-paste stubs: component, hook, service, route, context, handler, fetch, model | Starting any new file — use as your baseline                      |
+| File                                   | What It Covers                                                                    | Read When                                                                         |
+| -------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [`architecture.md`](architecture.md)   | Layer diagram for src/ and server/, adapter pattern, layer boundaries             | Starting a new feature, adding a route, unsure where code belongs                 |
+| [`patterns.md`](patterns.md)           | Code patterns: fetcher, createClient, service stubs, hooks                        | Writing a new service, hook, or utility                                           |
+| [`design-system.md`](design-system.md) | CSS tokens, naming conventions, component structure                               | Touching styles, adding components, Storybook work                                |
+| [`testing.md`](testing.md)             | Unit and e2e conventions, what to test, what to skip                              | Writing or debugging tests                                                        |
+| [`infra.md`](infra.md)                 | CI/CD pipeline (release.yml jobs), deploy targets, secrets reference, env vars    | Changing deploy config, adding env vars, activating a deploy target, debugging CI |
+| [`decisions.md`](decisions.md)         | ADRs — why key decisions were made                                                | Before proposing a change to core architecture                                    |
+| [`templates/`](templates/)             | Copy-paste stubs: component, hook, service, route, context, handler, fetch, model | Starting any new file — use as your baseline                                      |
