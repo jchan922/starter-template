@@ -1,24 +1,23 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { fetcher } from '@/lib/fetcher'
 
-/**
- * useFetch — thin React wrapper around the client fetcher.
- * For service calls, prefer calling services directly in event handlers.
- * Use this hook for data that needs to load on mount.
- *
- * @param {string} url - Full URL to fetch
- * @param {Object} [options] - Fetch options
- */
 export const useFetch = (url, options = {}) => {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  // Ref keeps options current without triggering re-renders when caller
+  // passes a new object literal on every render.
+  const optionsRef = useRef(options)
+  useEffect(() => {
+    optionsRef.current = options
+  })
+
   const execute = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
-      const result = await fetcher(url, options)
+      const result = await fetcher(url, optionsRef.current)
       setData(result)
     } catch (err) {
       setError(err)

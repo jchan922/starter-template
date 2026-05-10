@@ -18,7 +18,7 @@ export default [
     settings: { react: { version: '19' } },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'react/prop-types': 'off',
       'react-hooks/set-state-in-effect': 'off',

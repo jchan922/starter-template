@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/createClient'
 import { fetcher } from '@/lib/fetcher'
 
-const client = createClient({
+const _client = createClient({
   baseUrl: 'https://api.stripe.com',
   fetcher,
   getHeaders: async () => ({

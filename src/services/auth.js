@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/createClient'
 import { fetcher } from '@/lib/fetcher'
 
-const client = createClient({
+const _client = createClient({
   baseUrl: import.meta.env.VITE_AUTH_URL ?? '',
   fetcher,
   normalizeError: (err) => ({
