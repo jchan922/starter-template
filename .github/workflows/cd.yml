@@ -51,6 +51,9 @@ jobs:
           git push origin main
           git push origin "v${{ env.VERSION }}"
 
+      - name: Summary
+        run: echo "### Bumped to v${{ env.VERSION }}" >> $GITHUB_STEP_SUMMARY
+
   check-targets:
     needs: bump
     runs-on: ubuntu-latest
@@ -121,6 +124,9 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v5
 
+      - name: Summary
+        run: echo "### Deployed v${{ env.VERSION }} to GitHub Pages ✓" >> $GITHUB_STEP_SUMMARY
+
   deploy-cf:
     needs: [bump, check-targets]
     if: needs.check-targets.outputs.cf == 'true'
@@ -153,6 +159,9 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+
+      - name: Summary
+        run: echo "### Deployed v${{ env.VERSION }} to Cloudflare Pages ✓" >> $GITHUB_STEP_SUMMARY
 
   deploy-ecs:
     needs: [bump, check-targets]
@@ -216,3 +225,6 @@ jobs:
           service: ${{ secrets.ECS_SERVICE }}
           cluster: ${{ secrets.ECS_CLUSTER }}
           wait-for-service-stability: true
+
+      - name: Summary
+        run: echo "### Deployed v${{ env.VERSION }} to ECS ✓" >> $GITHUB_STEP_SUMMARY
