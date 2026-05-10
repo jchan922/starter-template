@@ -1,7 +1,9 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
+  workflow_run:
+    workflows: ['Auto Version']
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -19,13 +21,15 @@ concurrency:
 
 jobs:
   deploy:
-    if: "startsWith(github.event.head_commit.message, 'chore: release')"
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: main
 
       - name: Extract version
         run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
