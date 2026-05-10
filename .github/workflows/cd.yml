@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       skip_bump:
-        description: 'Deploy current version without bumping'
+        description: 'Redeploy current version'
         type: boolean
         default: false
 
