@@ -21,12 +21,4 @@
     text-align: center;
     margin: 0;
   }
-
-  .hello-world-version {
-    font-size: var(--font-sm);
-    color: var(--color-muted);
-    text-align: center;
-    margin: var(--space-xl) 0 0;
-    opacity: 0.5;
-  }
 }

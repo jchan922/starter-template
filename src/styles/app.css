@@ -1,0 +1,10 @@
+.app-version {
+  position: fixed;
+  bottom: var(--space-sm);
+  right: var(--space-sm);
+  font-size: var(--font-xs);
+  color: var(--color-muted);
+  opacity: 0.4;
+  pointer-events: none;
+  user-select: none;
+}
