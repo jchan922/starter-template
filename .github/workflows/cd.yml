@@ -29,6 +29,8 @@ jobs:
           cache: npm
 
       - run: npm install
+        env:
+          HUSKY: '0'
 
       - name: Configure git
         run: |
@@ -46,6 +48,8 @@ jobs:
           echo "PREV_VERSION=$PREV_VERSION" >> $GITHUB_ENV
 
       - name: Commit and tag
+        env:
+          HUSKY: '0'
         run: |
           git add package.json package-lock.json
           git commit -m "chore: release v${{ env.VERSION }} [skip ci]"
@@ -54,7 +58,14 @@ jobs:
           git push origin "v${{ env.VERSION }}"
 
       - name: Summary
-        run: echo "### v${{ env.PREV_VERSION }} → v${{ env.VERSION }}" >> $GITHUB_STEP_SUMMARY
+        run: |
+          {
+            echo "### Version bump"
+            echo "| | Version |"
+            echo "|---|---|"
+            echo "| Before | v${{ env.PREV_VERSION }} |"
+            echo "| After  | v${{ env.VERSION }} |"
+          } >> $GITHUB_STEP_SUMMARY
 
   check-targets:
     needs: bump
