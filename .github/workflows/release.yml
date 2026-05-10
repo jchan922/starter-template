@@ -98,9 +98,24 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v5
 
-  deploy-cf:
+  check-targets:
     needs: bump
-    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+    runs-on: ubuntu-latest
+    outputs:
+      cf: ${{ steps.check.outputs.cf }}
+      ecs: ${{ steps.check.outputs.ecs }}
+    steps:
+      - id: check
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ECR_REPO: ${{ secrets.ECR_REPOSITORY }}
+        run: |
+          [ -n "$CF_TOKEN" ] && echo "cf=true" >> $GITHUB_OUTPUT || echo "cf=false" >> $GITHUB_OUTPUT
+          [ -n "$ECR_REPO" ] && echo "ecs=true" >> $GITHUB_OUTPUT || echo "ecs=false" >> $GITHUB_OUTPUT
+
+  deploy-cf:
+    needs: [bump, check-targets]
+    if: needs.check-targets.outputs.cf == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -132,8 +147,8 @@ jobs:
           command: pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
 
   deploy-ecs:
-    needs: bump
-    if: ${{ secrets.ECR_REPOSITORY != '' }}
+    needs: [bump, check-targets]
+    if: needs.check-targets.outputs.ecs == 'true'
     runs-on: ubuntu-latest
     env:
       AWS_REGION: us-east-1
