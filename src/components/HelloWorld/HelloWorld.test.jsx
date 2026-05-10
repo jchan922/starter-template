@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import HelloWorld from './HelloWorld'
+
+afterEach(() => vi.unstubAllEnvs())
 
 /**
  * Unit test template.
@@ -31,5 +33,16 @@ describe('HelloWorld', () => {
   it('renders a custom subtitle', () => {
     render(<HelloWorld subtitle="Custom subtitle" />)
     expect(screen.getByText('Custom subtitle')).toBeDefined()
+  })
+
+  it('renders the version when VITE_APP_VERSION is set', () => {
+    vi.stubEnv('VITE_APP_VERSION', '1.2.3')
+    render(<HelloWorld />)
+    expect(screen.getByText('v1.2.3')).toBeDefined()
+  })
+
+  it('omits the version badge when VITE_APP_VERSION is not set', () => {
+    render(<HelloWorld />)
+    expect(screen.queryByText(/^v\d/)).toBeNull()
   })
 })
