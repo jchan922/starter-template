@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      skip_bump:
+        description: 'Deploy current version without bumping'
+        type: boolean
+        default: false
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -41,13 +46,18 @@ jobs:
         id: version
         run: |
           PREV_VERSION=$(node -p "require('./package.json').version")
-          npm version patch --no-git-tag-version
-          VERSION=$(node -p "require('./package.json').version")
+          if [ "${{ inputs.skip_bump }}" = "true" ]; then
+            VERSION=$PREV_VERSION
+          else
+            npm version patch --no-git-tag-version
+            VERSION=$(node -p "require('./package.json').version")
+          fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "PREV_VERSION=$PREV_VERSION" >> $GITHUB_ENV
 
       - name: Commit and tag
+        if: inputs.skip_bump != true
         env:
           HUSKY: '0'
         run: |
