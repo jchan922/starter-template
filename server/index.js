@@ -1,4 +1,4 @@
-// ECS/Node adapter entry point.
+// AWS ECS/Node adapter entry point.
 // Wire handler functions to your HTTP framework here.
 // Handlers return { status, body } — map them to HTTP responses below.
 //

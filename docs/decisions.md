@@ -60,11 +60,11 @@ migrations have happened multiple times across similar projects.
 **Runtime note:** The seam works at two levels:
 
 1. **Provider swap** — replace Stripe with something else, only `services/server/payments.js` changes.
-2. **Runtime swap** — migrate from CF Pages to ECS (or vice versa), only `services/server/` implementations change. Handlers, hooks, and components are untouched.
+2. **Runtime swap** — migrate from CF Pages to AWS ECS (or vice versa), only `services/server/` implementations change. Handlers, hooks, and components are untouched.
 
 The service files in this repo are intentionally interface-only stubs (function signatures + `throw`). The implementation inside each file will differ by runtime:
 
-|               | Node / ECS                      | CF Pages                         |
+|               | Node / AWS ECS                  | CF Pages                         |
 | ------------- | ------------------------------- | -------------------------------- |
 | `db.js`       | Mongoose, Prisma, pg            | D1 binding via `env`, Hyperdrive |
 | `payments.js` | Stripe Node SDK                 | Stripe REST API via `fetch`      |
@@ -116,7 +116,7 @@ or leaving routing as a per-project decision.
 
 **Decision:** React Router v7 with `createBrowserRouter`. Widest
 familiarity, clean loader pattern that maps to the service layer,
-works on both CF Pages and ECS without runtime differences.
+works on both CF Pages and AWS ECS without runtime differences.
 
 **Tradeoff:** TanStack Router has better long-term DX and type-safe
 routes, but adds upfront complexity for a template. Revisit if the
@@ -124,7 +124,7 @@ project commits to TypeScript.
 
 ---
 
-## ADR-007 — Template Supports Both CF Pages and ECS Deploy Targets
+## ADR-007 — Template Supports Both CF Pages and AWS ECS Deploy Targets
 
 **Date:** Project init
 **Status:** Accepted
@@ -136,7 +136,7 @@ more control). The server-side handler pattern needed to work for both.
 **Decision:** Application-layer patterns (handler/fetch/model, service
 layer, components, hooks) are runtime-agnostic. Deploy target is a
 per-project decision documented in infra.md. CF Pages uses Workers
-runtime; ECS uses full Node — the handler templates note where the
+runtime; AWS ECS uses full Node — the handler templates note where the
 adapter difference applies.
 
 **Tradeoff:** Infra docs cover two paths, which adds length. Worth it
@@ -150,13 +150,13 @@ to avoid baking in a deploy assumption that limits the template's reach.
 **Status:** Accepted
 
 **Context:** The template needed a server-side architecture that works for
-both CF Pages (Workers runtime) and ECS (Node runtime) without reshaping
+both CF Pages (Workers runtime) and AWS ECS (Node runtime) without reshaping
 code between targets. Original structure mixed server concerns into `src/`
 alongside browser code.
 
 **Decision:** `server/` at repo root, never imported by `src/`. Handlers
 are pure functions returning `{ status, body }`. Thin adapter files
-(`functions/` for CF Pages, `server/index.js` for ECS) are the only
+(`functions/` for CF Pages, `server/index.js` for AWS ECS) are the only
 runtime-specific code. `src/services/` is browser-only and flat.
 `server/db/` is a pure interface — implementation swapped per runtime.
 

@@ -2,7 +2,7 @@
 // No business logic lives here.
 //
 // CF Pages adapter: wire in functions/<resource>/[param].js using onRequest*
-// ECS/Node adapter: wire in server/index.js using your HTTP framework
+// AWS ECS/Node adapter: wire in server/index.js using your HTTP framework
 import { fetchThings, fetchThingById, persistThing } from './fetch.js'
 import { toThing, toThingList, fromBody } from './model.js'
 

@@ -19,7 +19,7 @@ Every new route touches both the server and (optionally) the frontend. Complete 
 3. Write `fetch.js` — all data access via `server/db` or `server/services/`
 4. Write `model.js` — pure transforms, no db or service imports
 5. **CF Pages:** add `functions/<resource>/[param].js` (see [`templates/adapter.cf.js`](templates/adapter.cf.js))
-6. **ECS/Node:** register the route in `server/index.js` (see [`templates/adapter.node.js`](templates/adapter.node.js))
+6. **AWS ECS/Node:** register the route in `server/index.js` (see [`templates/adapter.node.js`](templates/adapter.node.js))
 7. Write unit tests for `model.js` — pure functions, no mocks needed
 
 ### Frontend side (if the UI needs this route)
@@ -31,13 +31,13 @@ Every new route touches both the server and (optionally) the frontend. Complete 
 
 ### Templates
 
-| What             | Template                                                 |
-| ---------------- | -------------------------------------------------------- |
-| Handler          | [`templates/handler.js`](templates/handler.js)           |
-| Fetch layer      | [`templates/fetch.js`](templates/fetch.js)               |
-| Model layer      | [`templates/model.js`](templates/model.js)               |
-| CF Pages adapter | [`templates/adapter.cf.js`](templates/adapter.cf.js)     |
-| ECS/Node adapter | [`templates/adapter.node.js`](templates/adapter.node.js) |
+| What                 | Template                                                 |
+| -------------------- | -------------------------------------------------------- |
+| Handler              | [`templates/handler.js`](templates/handler.js)           |
+| Fetch layer          | [`templates/fetch.js`](templates/fetch.js)               |
+| Model layer          | [`templates/model.js`](templates/model.js)               |
+| CF Pages adapter     | [`templates/adapter.cf.js`](templates/adapter.cf.js)     |
+| AWS ECS/Node adapter | [`templates/adapter.node.js`](templates/adapter.node.js) |
 
 ---
 

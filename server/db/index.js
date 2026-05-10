@@ -1,5 +1,5 @@
 // DB interface — implement for your runtime when needed.
-// Node/ECS: Mongoose, Prisma, pg, etc.
+// Node/AWS ECS: Mongoose, Prisma, pg, etc.
 // CF Pages: D1 binding via env, or Hyperdrive for Postgres.
 // The interface below stays the same either way.
 

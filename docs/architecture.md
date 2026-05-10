@@ -80,7 +80,7 @@ Adapters are the only runtime-specific code. They contain no logic — only wiri
 
 **CF Pages** — `functions/<resource>/[param].js`. Uses `onRequest*` exports and `Response.json()`.
 
-**ECS/Node** — `server/index.js`. Uses your chosen HTTP framework (Hono recommended). Registers all routes.
+**AWS ECS/Node** — `server/index.js`. Uses your chosen HTTP framework (Hono recommended). Registers all routes.
 
 When you add a new route: write the handler once, wire it in both adapters. See [`docs/patterns.md`](patterns.md) for the full checklist.
 
@@ -91,4 +91,4 @@ When you add a new route: write the handler once, wire it in both adapters. See 
 The seam works at two levels:
 
 1. **Provider swap** — replace Stripe with another payment provider: only `server/services/payments.js` changes.
-2. **Runtime swap** — migrate from CF Pages to ECS: only `functions/` adapters and `server/db/` implementation change. Handlers, hooks, and components are untouched.
+2. **Runtime swap** — migrate from CF Pages to AWS ECS: only `functions/` adapters and `server/db/` implementation change. Handlers, hooks, and components are untouched.

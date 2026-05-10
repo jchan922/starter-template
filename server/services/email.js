@@ -2,7 +2,7 @@ import { createClient } from '../lib/createClient.js'
 import { fetcher } from '../lib/fetcher.js'
 
 // Email service — secret key safe here.
-// Node/ECS: use Resend/Postmark/SendGrid SDK or Nodemailer.
+// Node/AWS ECS: use Resend/Postmark/SendGrid SDK or Nodemailer.
 // CF Pages: call provider REST API directly via fetch.
 const client = createClient({
   baseUrl: 'https://api.resend.com',

@@ -2,7 +2,7 @@ import { createClient } from '../lib/createClient.js'
 import { fetcher } from '../lib/fetcher.js'
 
 // Server-side payment calls — secret key safe here.
-// Node/ECS: use Stripe Node SDK instead of this HTTP client.
+// Node/AWS ECS: use Stripe Node SDK instead of this HTTP client.
 // CF Pages: call Stripe REST API via fetch — no SDK needed.
 const client = createClient({
   baseUrl: 'https://api.stripe.com',

@@ -29,7 +29,7 @@ Jobs run in sequence. One Actions tab entry per merge.
 ```
 bump ──────────────────┬── deploy-gh   (always)
                        ├── deploy-cf   (when CF secrets are set)
-                       └── deploy-ecs  (when ECS secrets are set)
+                       └── deploy-ecs  (when AWS ECS secrets are set)
 ```
 
 **bump** — always increments patch version in `package.json`, commits as
@@ -76,7 +76,7 @@ Config reference: [`infra/wrangler.toml`](../infra/wrangler.toml)
 Containerised Node.js via Docker. Full Node runtime — all handler/fetch/model
 patterns work as-is. Server routes are registered in [`server/index.js`](../server/index.js).
 
-Wire up: add the 6 ECS secrets → `deploy-ecs` job activates.
+Wire up: add the 6 AWS ECS secrets → `deploy-ecs` job activates.
 
 Reference: [`Dockerfile`](../Dockerfile), [`docs/templates/adapter.node.js`](templates/adapter.node.js)
 
@@ -109,9 +109,9 @@ Reference: [`Dockerfile`](../Dockerfile), [`docs/templates/adapter.node.js`](tem
 | `CLOUDFLARE_ACCOUNT_ID`   | CF Pages                              |
 | `CLOUDFLARE_PROJECT_NAME` | CF Pages                              |
 | `VITE_APP_NAME`           | CF Pages build                        |
-| `VITE_API_URL`            | CF Pages + ECS build                  |
+| `VITE_API_URL`            | CF Pages + AWS ECS build              |
 | `VITE_STRIPE_PUBLIC_KEY`  | CF Pages build                        |
-| `AWS_ACCESS_KEY_ID`       | ECS (activates deploy-ecs)            |
+| `AWS_ACCESS_KEY_ID`       | AWS ECS (activates deploy-aws-ecs)    |
 | `AWS_SECRET_ACCESS_KEY`   | ECS                                   |
 | `ECR_REPOSITORY`          | ECS                                   |
 | `ECS_CLUSTER`             | ECS                                   |

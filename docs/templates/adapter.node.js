@@ -1,4 +1,4 @@
-// ECS/Node adapter — register handlers in server/index.js.
+// AWS ECS/Node adapter — register handlers in server/index.js.
 // Copy the relevant app.get/post/put/delete lines into server/index.js.
 // Handlers return { status, body } — map them to HTTP responses here.
 import { listThings, getThing, createThing } from './handlers/things/handler.js'

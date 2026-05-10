@@ -1,8 +1,8 @@
-name: Deploy ECS (manual)
+name: Deploy AWS ECS (manual)
 
 # Parked — activate by adding AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
 # ECR_REPOSITORY, ECS_CLUSTER, ECS_SERVICE, and ECS_TASK_DEFINITION secrets.
-# The deploy-ecs job in cd.yml will then run automatically on every
+# The deploy-aws-ecs job in cd.yml will then run automatically on every
 # merge to main. This file is a manual fallback only.
 
 on:

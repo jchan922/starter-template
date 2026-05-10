@@ -190,7 +190,7 @@ jobs:
       - name: Summary
         run: echo "### Deployed v${{ env.VERSION }} to Cloudflare Pages ✓" >> $GITHUB_STEP_SUMMARY
 
-  deploy-ecs:
+  deploy-aws-ecs:
     needs: [bump, check-targets]
     if: needs.check-targets.outputs.ecs == 'true'
     runs-on: ubuntu-latest
@@ -254,4 +254,4 @@ jobs:
           wait-for-service-stability: true
 
       - name: Summary
-        run: echo "### Deployed v${{ env.VERSION }} to ECS ✓" >> $GITHUB_STEP_SUMMARY
+        run: echo "### Deployed v${{ env.VERSION }} to AWS ECS ✓" >> $GITHUB_STEP_SUMMARY
