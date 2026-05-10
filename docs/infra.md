@@ -22,7 +22,7 @@ Runs on every PR targeting `main`. Merge is blocked if any step fails.
 | Build        | `vite build`                   |
 | E2E tests    | `playwright test`              |
 
-### On merge to main → [`release.yml`](../.github/workflows/release.yml)
+### On merge to main → [`cd.yml`](../.github/workflows/cd.yml)
 
 Jobs run in sequence. One Actions tab entry per merge.
 
@@ -49,7 +49,7 @@ Activates automatically when `ECR_REPOSITORY` secret is added.
 ### Activating a deploy target
 
 No code changes needed. Add the secrets listed below for the target and the
-corresponding job in `release.yml` will start running on the next merge.
+corresponding job in `cd.yml` will start running on the next merge.
 
 ---
 
@@ -96,7 +96,7 @@ Reference: [`Dockerfile`](../Dockerfile), [`docs/templates/adapter.node.js`](tem
 1. Add to `.env` locally with real value
 2. Add to [`.env.example`](../.env.example) with description, empty value
 3. Add to GitHub repo secrets if needed in CI
-4. Add to the relevant `env:` block in [`.github/workflows/release.yml`](../.github/workflows/release.yml)
+4. Add to the relevant `env:` block in [`.github/workflows/cd.yml`](../.github/workflows/cd.yml)
 
 ---
 
