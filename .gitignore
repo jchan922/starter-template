@@ -53,6 +53,9 @@ vite.config.js.timestamp-*
 # ─── Cloudflare ───────────────────────────────
 .wrangler/
 
+# ─── Superpowers ──────────────────────────────
+docs/superpowers/
+
 # ─── Misc ─────────────────────────────────────
 *.pem
 .vercel
