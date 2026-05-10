@@ -5,50 +5,80 @@
 
 ---
 
+## CI/CD Pipeline
+
+Two workflows. One entry in the Actions tab per PR, one per merge to main.
+
+### On pull request → [`ci.yml`](../.github/workflows/ci.yml)
+
+Runs on every PR targeting `main`. Merge is blocked if any step fails.
+
+| Step         | Command                        |
+| ------------ | ------------------------------ |
+| Format check | `prettier --check .`           |
+| Lint         | `eslint src`                   |
+| Audit        | `npm audit --audit-level=high` |
+| Unit tests   | `vitest run`                   |
+| Build        | `vite build`                   |
+| E2E tests    | `playwright test`              |
+
+### On merge to main → [`release.yml`](../.github/workflows/release.yml)
+
+Jobs run in sequence. One Actions tab entry per merge.
+
+```
+bump ──────────────────┬── deploy-gh   (always)
+                       ├── deploy-cf   (when CF secrets are set)
+                       └── deploy-ecs  (when ECS secrets are set)
+```
+
+**bump** — always increments patch version in `package.json`, commits as
+`chore: release vX.X.X [skip ci]`, pushes the commit and a `vX.X.X` tag.
+The `[skip ci]` tag suppresses re-triggering. No commit message conventions
+required — every merge is a patch bump regardless of message content.
+
+**deploy-gh** — builds with `VITE_APP_VERSION` set from `package.json` and
+deploys to GitHub Pages. Always active.
+
+**deploy-cf** — builds and deploys to Cloudflare Pages. Activates automatically
+when `CLOUDFLARE_API_TOKEN` secret is added.
+
+**deploy-ecs** — builds Docker image, pushes to ECR, updates ECS task definition.
+Activates automatically when `ECR_REPOSITORY` secret is added.
+
+### Activating a deploy target
+
+No code changes needed. Add the secrets listed below for the target and the
+corresponding job in `release.yml` will start running on the next merge.
+
+---
+
 ## Deploy Targets
 
-This template supports two paths. Choose one per project.
+### GitHub Pages (active)
+
+Static frontend only. Zero config — deploy-gh runs on every merge.
+
+The app version is rendered in the bottom-right corner of every page via
+`VITE_APP_VERSION`, injected at build time from `package.json`.
 
 ### Cloudflare Pages
 
-Zero-ops static + edge functions. Push to `main` deploys automatically via GitHub Actions.
+Static frontend + edge functions via `functions/`. Server routes are thin
+adapters in `functions/` that call handlers in `server/handlers/`.
 
-Config: [`/infra/wrangler.toml`](../infra/wrangler.toml)
-Deploy command: `pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}`
-Server routes live in [`functions/`](../functions/) as CF Pages Functions. Each file maps one route to a handler in `server/handlers/`. See [`templates/adapter.cf.js`](templates/adapter.cf.js).
+Wire up: add the 3 CF secrets → `deploy-cf` job activates.
 
-Update `name` in [`infra/wrangler.toml`](../infra/wrangler.toml) before first deploy.
+Config reference: [`infra/wrangler.toml`](../infra/wrangler.toml)
 
-**Runtime note:** Server functions run in the CF Workers runtime — no Node.js APIs. Use `Request`/`Response` web standards. The `handler/fetch/model` pattern applies but the adapter layer differs from Node. See [CF Pages Functions docs](https://developers.cloudflare.com/pages/functions/).
+### AWS ECS
 
-### AWS ECS (Terraform)
+Containerised Node.js via Docker. Full Node runtime — all handler/fetch/model
+patterns work as-is. Server routes are registered in [`server/index.js`](../server/index.js).
 
-Containerised Node.js. Full Node runtime — all handler/fetch/model patterns work as-is.
+Wire up: add the 6 ECS secrets → `deploy-ecs` job activates.
 
-- Write Terraform in `/infra/` to define ECS task, service, ALB, and ECB repository
-- Update [`deploy.yml`](../.github/workflows/deploy.yml) to build and push the Docker image and trigger a deployment
-- Use [`infra/Dockerfile`](../infra/Dockerfile) as the container definition
-- Server routes are registered in [`server/index.js`](../server/index.js). See [`templates/adapter.node.js`](templates/adapter.node.js).
-
----
-
-## CI/CD
-
-| Trigger      | Pipeline                                        | What runs                                   |
-| ------------ | ----------------------------------------------- | ------------------------------------------- |
-| Pull request | [`ci.yml`](../.github/workflows/ci.yml)         | format, lint, audit, unit tests, build, e2e |
-| Push to main | [`deploy.yml`](../.github/workflows/deploy.yml) | build + deploy (target-specific)            |
-
-Merge is blocked if CI fails or if `npm audit` finds high severity vulnerabilities.
-
----
-
-## Dependency Management
-
-Dependabot runs monthly and opens PRs for outdated npm packages.
-Review and merge these PRs to keep the dependency tree healthy.
-
-`npm audit --audit-level=high` runs on every PR and blocks merge on high severity vulnerabilities.
+Reference: [`Dockerfile`](../Dockerfile), [`docs/templates/adapter.node.js`](templates/adapter.node.js)
 
 ---
 
@@ -56,30 +86,44 @@ Review and merge these PRs to keep the dependency tree healthy.
 
 ### Rules
 
-1. `VITE_` prefix = exposed to browser bundle. Public values only.
-2. No prefix = server/build only. Safe for secrets.
-3. Never commit `.env` or `.env.production`
-4. Always document new vars in [`.env.example`](../.env.example) with a description
+1. `VITE_` prefix → exposed to browser bundle. Public values only.
+2. No prefix → server/build only. Safe for secrets.
+3. Never commit `.env` or `.env.production`.
+4. Document new vars in [`.env.example`](../.env.example).
 
-### Adding a New Variable
+### Adding a Variable
 
 1. Add to `.env` locally with real value
-2. Add to [`.env.example`](../.env.example) with description and empty value
-3. Add to GitHub repository secrets if needed in CI
-4. Update [`deploy.yml`](../.github/workflows/deploy.yml) env block if needed at build time
+2. Add to [`.env.example`](../.env.example) with description, empty value
+3. Add to GitHub repo secrets if needed in CI
+4. Add to the relevant `env:` block in [`.github/workflows/release.yml`](../.github/workflows/release.yml)
 
-### GitHub Secrets Required for Deploy
+---
 
-Add these to your GitHub repo under `Settings → Secrets → Actions` before the first push.
+## Secrets Reference
 
-| Secret                    | Description                                 |
-| ------------------------- | ------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN`    | Cloudflare API token with Pages permissions |
-| `CLOUDFLARE_ACCOUNT_ID`   | Your Cloudflare account ID                  |
-| `CLOUDFLARE_PROJECT_NAME` | Name of your Cloudflare Pages project       |
-| `VITE_APP_NAME`           | App name passed at build time               |
-| `VITE_API_URL`            | API base URL passed at build time           |
-| `VITE_STRIPE_PUBLIC_KEY`  | Stripe public key passed at build time      |
+| Secret                    | Required for                          |
+| ------------------------- | ------------------------------------- |
+| `GH_PAT`                  | Always — bump job pushes back to main |
+| `CLOUDFLARE_API_TOKEN`    | CF Pages (activates deploy-cf)        |
+| `CLOUDFLARE_ACCOUNT_ID`   | CF Pages                              |
+| `CLOUDFLARE_PROJECT_NAME` | CF Pages                              |
+| `VITE_APP_NAME`           | CF Pages build                        |
+| `VITE_API_URL`            | CF Pages + ECS build                  |
+| `VITE_STRIPE_PUBLIC_KEY`  | CF Pages build                        |
+| `AWS_ACCESS_KEY_ID`       | ECS (activates deploy-ecs)            |
+| `AWS_SECRET_ACCESS_KEY`   | ECS                                   |
+| `ECR_REPOSITORY`          | ECS                                   |
+| `ECS_CLUSTER`             | ECS                                   |
+| `ECS_SERVICE`             | ECS                                   |
+| `ECS_TASK_DEFINITION`     | ECS                                   |
+
+---
+
+## Dependency Management
+
+Dependabot runs monthly and opens PRs for outdated npm packages.
+`npm audit --audit-level=high` blocks merge on high severity vulnerabilities.
 
 ---
 
@@ -87,6 +131,6 @@ Add these to your GitHub repo under `Settings → Secrets → Actions` before th
 
 Node 24 is pinned across the project:
 
-- [`.nvmrc`](../.nvmrc) — run `nvm use` to switch automatically
-- [`package.json`](../package.json) engines field — documents the requirement
-- [`.github/workflows`](../.github/workflows) — both pipelines use `node-version: 24`
+- [`.nvmrc`](../.nvmrc) — `nvm use` switches automatically
+- [`package.json`](../package.json) engines field
+- All workflows use `node-version: 24`
